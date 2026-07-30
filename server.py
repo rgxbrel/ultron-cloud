@@ -21,6 +21,7 @@ async def health():
         except Exception:
             return "error", 500
 
-@app.get("/")
+@app.get("/", response_class=PlainTextResponse)
+@app.head("/")
 async def root():
-    return {"status": "ok"}
+    return "ok"
