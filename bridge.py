@@ -1,3 +1,5 @@
+import os
+
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 if not BOT_TOKEN:
     if os.path.exists("/root/.hermes/config.yaml"):
@@ -8,3 +10,5 @@ if not BOT_TOKEN:
                 if token:
                     os.environ["BOT_TOKEN"] = token
                     break
+
+from server import app
