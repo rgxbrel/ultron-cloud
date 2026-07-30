@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ultron-ping
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /ping
+    autoDeploy: true
+    envVars:
+      - key: HERMES_BASE
+        value: http://127.0.0.1:9119
