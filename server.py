@@ -1,20 +1,24 @@
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.responses import PlainTextResponse
 import httpx
 import os
 
 app = FastAPI()
 HERMES_BASE = os.getenv("HERMES_BASE", "http://127.0.0.1:9119")
 
-@app.get("/ping")
+@app.get("/ping", response_class=PlainTextResponse)
 async def ping():
-    return {"status": "ok"}
+    return "ok"
 
-@app.get("/health")
+@app.get("/health", response_class=PlainTextResponse)
 async def health():
     async with httpx.AsyncClient(timeout=10) as client:
         try:
-            r = await client.get(f"{HERMES_BASE}/")
-            return {"status": "ok", "hermes_status": r.status_code}
-        except Exception as e:
-            return JSONResponse(status_code=500, content={"status": "error", "detail": str(e)})
+            await client.get(f"{HERMES_BASE}/")
+            return "ok"
+        except Exception:
+            return "error", 500
+
+@app.get("/")
+async def root():
+    return {"status": "ok"}
