@@ -10,19 +10,19 @@ async def ping():
     return "ok"
 
 @app.get("/telegram/webhook", response_class=PlainTextResponse)
-@app.post("/telegram/webhook")
-async def telegram_webhook(request: Request):
-    if request.method == "GET":
-        return "ok"
+@app.head("/telegram/webhook")
+async def telegram_webhook_get():
+    return "ok"
+
+@app.post("/telegram/webhook", response_class=PlainTextResponse)
+async def telegram_webhook_post(request: Request):
     try:
         body = await request.json()
-        update = body.get("update_id")
         message = body.get("message") or body.get("edited_message")
         if not message:
             return PlainTextResponse("ok", status_code=200)
 
         chat_id = message.get("chat", {}).get("id")
-        text = message.get("text") or ""
         if chat_id is None:
             return PlainTextResponse("ok", status_code=200)
 
